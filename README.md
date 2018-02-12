@@ -20,6 +20,6 @@ access them through JAVA libraries.
 
 ## Notes
 NLTK distribution could be both patched and made into thinking there is a
-Python-like Sqlite3 support (see patches).
+Python-like Sqlite3 support in Jython (see patches).
 
 It has a nice script for building the standalone fat jar distribution as well.
