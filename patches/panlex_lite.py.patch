@@ -1,0 +1,27 @@
+Patch to allow running from under Jython.
+The sqlite module is implemented as native in Python, hence here it is replaced
+with Java.
+--- site-packages/nltk/corpus/reader/panlex_lite.py.orig	2018-02-11 20:47:40.000000000 +0300
++++ site-packages/nltk/corpus/reader/panlex_lite.py	2018-02-11 20:46:51.000000000 +0300
+@@ -12,7 +12,9 @@
+ """
+ 
+ import os
+-import sqlite3
++#import sqlite3
++from java.lang import Class
++from java.sql  import DriverManager, SQLException
+ 
+ from nltk.corpus.reader.api import CorpusReader
+ 
+@@ -42,7 +44,9 @@
+     """
+ 
+     def __init__(self, root):
+-        self._c = sqlite3.connect(os.path.join(root, 'db.sqlite')).cursor()
++        JDBC_URL = 'jdbc:sqlite:%s' % ( os.path.join(root, 'db.sqlite'), )
++        self._c = getConnection(JDBC_URL, "org.sqlite.JDBC").cursor()
++#        self._c = sqlite3.connect(os.path.join(root, 'db.sqlite')).cursor()
+ 
+         self._uid_lv = {}
+         self._lv_uid = {}
