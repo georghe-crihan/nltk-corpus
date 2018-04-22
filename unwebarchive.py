@@ -44,6 +44,8 @@ def descend_tree(_pl, subcomp='', allCont=False):
         _fname = '%s/%s%s' % (argv[2], subcomp + '_' + t, _ext)
         if 'WebResourceURL' in pl:
             _u = url_to_name(pl['WebResourceURL'])
+            if not _u:
+                _u = '1'
             _f = '%s/%s' % (argv[2], _u)
             if _f + _ext in fl or exists(_f + '_ext'):
                 c = 0
