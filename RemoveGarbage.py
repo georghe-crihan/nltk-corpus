@@ -1,7 +1,7 @@
 #!/usr/bin/env jython
 # -*- coding: utf-8 -*-
 from platform import python_implementation
-if python_implementation == 'Jython':
+if python_implementation() == 'Jython':
     import import_site_packages
 from io import open as iopen
 from xml.etree.ElementTree import iterparse, XMLParser, tostring as ETtostring
@@ -20,7 +20,7 @@ else:
 #with iopen(outfile, "w", encoding="utf-8", errors="ignore") as output:
 if True:
     parser = XMLParser()
-    if python_implementation != 'Jython':
+    if python_implementation() != 'Jython':
         parser._parser.UseForeignDTD(True)
     parser.entity['nbsp'] = ' '
     for event, element in iterparse(outfile, parser=parser, events=['start']):

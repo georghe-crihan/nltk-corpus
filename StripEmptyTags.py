@@ -1,7 +1,7 @@
 #!/usr/bin/env jython
 # -*- coding: utf-8 -*-
 from platform import python_implementation
-if python_implementation == 'Jython':
+if python_implementation() == 'Jython':
     import import_site_packages
     import sqlite3
 from io import open as iopen
