@@ -13,6 +13,7 @@ from org.jsoup import Jsoup
 from org.jsoup.nodes import Element
 from org.jsoup.select import NodeTraversor, NodeVisitor
 from org.jsoup.parser import Tag
+from org.jsoup.safety import Whitelist
 from sys import argv
 #from nltk.book import *
 
@@ -24,12 +25,14 @@ class MyVisitor(NodeVisitor):
 
     def head(self, node, depth):
         if isinstance(node, Element):
+            # Create empty tag list
             if len(node.ownText()) == 0 \
                  and len(node.children()) == 0 \
                  and node.tag().toString() not in [ "br" ]:
                 self._strip_list.append(node)
+            # Create label list
             if node.tag().toString() == 'div' and node.className() == "im-mess-stack--pname":
-                self._label_list.append(node)
+                self._label_list.append({ 'node': node })
 
     def tail(self, node, depth):
         pass
@@ -40,21 +43,23 @@ class MyVisitor(NodeVisitor):
   
     def replace_label_nodes(self):
 	for node in self._label_list:
-            for anchor in node.select("a"):
+            for anchor in node["node"].select("a"):
                 if anchor.className() == "im-mess-stack--lnk":
                     new_div = Element(Tag.valueOf("div"), "")  
                     new_div.addClass("label")
                     new_div.attr("href", anchor.attr("href"))
                     new_div.appendText(anchor.attr("href"))
-                    node.replaceWith(new_div)
+                    node["node"].replaceWith(new_div)
                     break
 
-if len(argv) < 3:
+if len(argv) < 4:
 	infile = "/Users/mac/Downloads/im"
         outfile = "/Users/mac/Downloads/dialogues.html"
+        textfile = "/Users/mac/Downloads/dialogues.txt"
 else:
 	infile = argv[1]
 	outfile = argv[2]
+        textfile = argv[3]
 
 with iopen(outfile, "w", encoding="utf-8", errors="ignore") as output:
     input = File(infile)
@@ -77,3 +82,7 @@ with iopen(outfile, "w", encoding="utf-8", errors="ignore") as output:
     visitor.replace_label_nodes()
 
     output.write(new_doc.outerHtml())
+
+with iopen(textfile, "w", encoding="utf-8", errors="ignore") as output:
+    wl = Whitelist().relaxed().removeTags("a")
+    output.write(Jsoup.clean(new_doc.outerHtml(), wl))
