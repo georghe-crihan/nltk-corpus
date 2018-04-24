@@ -2,10 +2,6 @@
 JYTHON_HOME=/opt/local/share/java/jython
 HEAP_SZ=6
 
-if [ -n ${1} ]; then
-	CMD="StripEmptyTags.py a b"
-fi
-
 TERM=xterm-color \
 	/usr/bin/java \
 	-Xss2560k \
@@ -20,5 +16,5 @@ TERM=xterm-color \
 	-Dpython.cachedir=/Users/mac/.jython_cachedir \
 	-Dfile.encoding=UTF-8 \
 	org.python.util.jython \
-	${CMD}
+	${@}
 
