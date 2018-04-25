@@ -41,9 +41,10 @@ local TARGET="${1}"
 
 function add_scripts()
 {
-local TARGET="${1}"
-local UPD="${2}"
-local NG="${3}"
+local JYTHON_HOME="${1}"
+local TARGET="${2}"
+local UPD="${3}"
+local NG="${4}"
 local CMD1
 local CMD2
 
@@ -57,7 +58,7 @@ local CMD2
 		CMD2='-f'
 	fi
 
-if [ -z ${FASTER} ]; then
+if [ -z ${UPD} ]; then
 	TERM=xterm-color ${CMD1} -c '
 from py_compile import compile
 import import_site_packages
@@ -69,7 +70,7 @@ reload(__run__)
 '
 else
 # Or think of 'from py_compile import compile \ compile("script.py")
-        TERM=xterm-color ${CMD1} -m compileall .
+        TERM=xterm-color ${CMD1} ${JYTHON_HOME}/Lib/compileall.py -x \.\/\.git\/ .
 fi
 # Sadly, currently does not work
 	cp '__run__$py.class' '__main__$py.class'
@@ -114,8 +115,12 @@ if [ -z "${UPD}" ]; then
 	set_entrypoint "${TARGET}"
 fi
 
-# Build dependencies fat jar.
-mvn package
-add_scripts "${TARGET}" "${UPD}" "${NG}"
+# Java dependencies are now tracked through the Maven pom.xml
+if [ ! -r ./target/*-jar-with-dependencies.jar ]; then
+    # Build dependencies fat jar.
+    mvn package
+fi
+
+add_scripts "/opt/local/share/java/jython" "${TARGET}" "${UPD}" "${NG}"
 ls -lh "${TARGET}"
 
