@@ -57,7 +57,9 @@ local CMD2
 		CMD2='-f'
 	fi
 
+if [ -z ${FASTER} ]; then
 	TERM=xterm-color ${CMD1} -c '
+from py_compile import compile
 import import_site_packages
 import sqlite3
 import __run__
@@ -65,6 +67,10 @@ import __run__
 #reload(sqlite3)
 reload(__run__)
 '
+else
+# Or think of 'from py_compile import compile \ compile("script.py")
+        TERM=xterm-color ${CMD1} -m compileall .
+fi
 # Sadly, currently does not work
 	cp '__run__$py.class' '__main__$py.class'
         DIST=${PWD}
