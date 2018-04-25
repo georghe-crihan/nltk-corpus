@@ -13,7 +13,7 @@ sleep 2
 # Set up aliases
 ng ng-alias ng-epubcheck com.adobe.epubcheck.tool.Checker 
 # These are for the NLTK scripts being developed.
-ng ng-cp /Users/mac/jython-dist/myapp.jar
+ng ng-cp /Users/mac/sandbox/jython-dist/myapp.jar
 ng ng-alias ng-jarrunner org.python.util.JarRunner
 ng ng-alias ng-jython org.python.util.jython
 

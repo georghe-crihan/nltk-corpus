@@ -11,13 +11,13 @@ from analysis.corpus_analysis import CorpusAnalyser
 #from pprint import pprint
 
 if len(argv) < 8:
-    input = "/Users/mac/jython-dist/belkub.txt"
-    tk_output = "/Users/mac/jython-dist/tokens.txt"
-    fd_output = "/Users/mac/jython-dist/freqdist.txt"
-    fdc_output = "/Users/mac/jython-dist/freqdist_complete.txt"
-    cn_output = "/Users/mac/jython-dist/concordance.txt"
-    cl2_output = "/Users/mac/jython-dist/collocations2.txt"
-    cl3_output = "/Users/mac/jython-dist/collocations3.txt"
+    input = "/Users/mac/sandbox/jython-dist/belkub.txt"
+    tk_output = "/Users/mac/sandbox/jython-dist/tokens.txt"
+    fd_output = "/Users/mac/sandbox/jython-dist/freqdist.txt"
+    fdc_output = "/Users/mac/sandbox/jython-dist/freqdist_complete.txt"
+    cn_output = "/Users/mac/sandbox/jython-dist/concordance.txt"
+    cl2_output = "/Users/mac/sandbox/jython-dist/collocations2.txt"
+    cl3_output = "/Users/mac/sandbox/jython-dist/collocations3.txt"
 else:
     input = argv[1]
     tk_output = argv[2]
