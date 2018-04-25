@@ -7,7 +7,7 @@ from io import open as iopen
 from sys import argv
 from nltk.stem.snowball import RussianStemmer
 from nltk import FreqDist
-from CorpusAnalyser import CorpusAnalyser
+from analysis.corpus_analysis import CorpusAnalyser
 #from pprint import pprint
 
 if len(argv) < 6:
