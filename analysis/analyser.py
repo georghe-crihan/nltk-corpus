@@ -10,20 +10,22 @@ from nltk import FreqDist
 from analysis.corpus_analysis import CorpusAnalyser
 #from pprint import pprint
 
-if len(argv) < 7:
+if len(argv) < 8:
     input = "/Users/mac/jython-dist/belkub.txt"
     tk_output = "/Users/mac/jython-dist/tokens.txt"
     fd_output = "/Users/mac/jython-dist/freqdist.txt"
     fdc_output = "/Users/mac/jython-dist/freqdist_complete.txt"
     cn_output = "/Users/mac/jython-dist/concordance.txt"
-    cl_output = "/Users/mac/jython-dist/collocations.txt"
+    cl2_output = "/Users/mac/jython-dist/collocations2.txt"
+    cl3_output = "/Users/mac/jython-dist/collocations3.txt"
 else:
     input = argv[1]
     tk_output = argv[2]
     fd_output = argv[3]
     fdc_output = argv[4]
     cn_output = argv[5]
-    cl_output = argv[6]
+    cl2_output = argv[6]
+    cl3_output = argv[7]
 
 text = CorpusAnalyser(
 #    SnowballStemmer('russian', ignore_stopwords=False),
@@ -48,9 +50,14 @@ with iopen(tk_output, 'w', encoding='utf-8', errors='ignore') as out:
     for t in text.stem_tokens:
         out.write(t + "\n")
 
-with iopen(cl_output, 'w', encoding='utf-8', errors='ignore') as out:
-    for c in text.collocations(3):
-        out.write("%s, %s\n" % (c[0], c[1]))
+with iopen(cl2_output, 'w', encoding='utf-8', errors='ignore') as out:
+    bigrams, trigrams = text.collocations(10000, 3)
+    for c in bigrams:
+        out.write("%s %s\n" % (c[0], c[1]))
+
+    with iopen(cl3_output, 'w', encoding='utf-8', errors='ignore') as out:
+        for c in trigrams:
+            out.write("%s %s %s\n" % (c[0], c[1], c[2]))
 
 with iopen(cn_output, 'w', encoding='utf-8', errors='ignore') as out:
     for _c in text.concordance(u"правда"):

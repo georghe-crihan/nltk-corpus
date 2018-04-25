@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from re import compile
 from nltk import word_tokenize, Index, FreqDist, WordNetLemmatizer
-from nltk.collocations import BigramAssocMeasures, TrigramAssocMeasures, BigramCollocationFinder
+from nltk.collocations import BigramAssocMeasures, TrigramAssocMeasures, BigramCollocationFinder, TrigramCollocationFinder
 
 
 class CorpusAnalyser(object):
@@ -17,14 +17,15 @@ class CorpusAnalyser(object):
         self.vocab = sorted(set(self._words))
         self._stemmer = stemmer
         self._re_numbers = compile(r"[+-]?[0-9]+")
-        self._re_punctuation = compile(r"[\.,;:\-+=%\?!#\(\)\[\]]")
+        self._re_punctuation = compile(r"[\.,;:~\-+=/%\?!#\(\)\[\]]")
         self._index = Index((self._stem(_word), _i)
                                  for (_i, _word) in enumerate(self._words))
 
         _wnl = WordNetLemmatizer()
         self.stem_tokens = [_wnl.lemmatize(_t) for _t in _tokens]
 
-        self._finder = BigramCollocationFinder.from_words(self._words)
+        self._bigram_finder = BigramCollocationFinder.from_words(self._words)
+        self._trigram_finder = TrigramCollocationFinder.from_words(self._words)
 
     def concordance(self, word, width=40):
         _c = []
@@ -50,7 +51,9 @@ class CorpusAnalyser(object):
                 _freqdist[word.lower()] += 1
         return _freqdist
 
-    def collocations(self, freq=None):
+    def collocations(self, top, freq=None):
         if freq:
-            self._finder.apply_freq_filter(freq)
-        return self._finder.nbest(BigramAssocMeasures().pmi, 10)
+            self._bigram_finder.apply_freq_filter(freq)
+            self._trigram_finder.apply_freq_filter(freq)
+        return (self._bigram_finder.nbest(BigramAssocMeasures().pmi, top),
+                  self._trigram_finder.nbest(TrigramAssocMeasures().pmi, top))
