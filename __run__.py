@@ -1,10 +1,10 @@
 #!/usr/bin/env jython
 # -*- coding: utf-8 -*-
-#import import_site_packages
-#import sqlite3
-from xml.etree import ElementTree as etree
+from platform import python_implementation
+if python_implementation() == 'Jython':
+    import import_site_packages
+    import sqlite3
 from sys import argv
-#from nltk.book import *
 
 if len(argv) < 3:
 	infile = "/Users/mac/Downloads/Диалоги.webarchive"
@@ -12,12 +12,6 @@ if len(argv) < 3:
 else:
 	infile = argv[1]
 	outfile = argv[2]
- 
-for event, element in etree.iterparse(infile):
-	if event=='start':
-		if element.tag == 'body':
-                    pass
-	if event=='end':
-		if element.tag == 'body':
-                    pass
-	element.clear()
+
+#execfile("analysis/analyser.py") 
+import analysis.analyser

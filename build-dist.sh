@@ -67,8 +67,13 @@ reload(__run__)
 '
 # Sadly, currently does not work
 	cp '__run__$py.class' '__main__$py.class'
-	zip ${CMD2} "${TARGET}" 'import_site_packages$py.class' '__run__$py.class' 'sqlite3$py.class' '__main__$py.class'
-	rm -f 'import_site_packages$py.class'
+        DIST=${PWD}
+        rm -rf /tmp/jardeps; mkdir /tmp/jardeps
+        (cd /tmp/jardeps; jar -xf ${DIST}/target/*-jar-with-dependencies.jar;
+        zip -r ${CMD2} "${DIST}/${TARGET}" . -x META-INF/MANIFEST.MF)
+        zip -r ${CMD2} "${TARGET}" 'import_site_packages$py.class' '__run__$py.class' 'sqlite3$py.class' '__main__$py.class' \
+            ./analysis/ -i '*.class'
+        rm -rf /tmp/jardeps 'import_site_packages$py.class'
 }
 
 
@@ -102,6 +107,9 @@ if [ -z "${UPD}" ]; then
 	build_jar "/opt/local/share/java/jython" "${TARGET}"
 	set_entrypoint "${TARGET}"
 fi
+
+# Build dependencies fat jar.
+mvn package
 add_scripts "${TARGET}" "${UPD}" "${NG}"
 ls -lh "${TARGET}"
 
