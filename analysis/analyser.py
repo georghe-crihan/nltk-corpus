@@ -10,18 +10,20 @@ from nltk import FreqDist
 from analysis.corpus_analysis import CorpusAnalyser
 #from pprint import pprint
 
-if len(argv) < 6:
+if len(argv) < 7:
     input = "/Users/mac/jython-dist/belkub.txt"
     tk_output = "/Users/mac/jython-dist/tokens.txt"
     fd_output = "/Users/mac/jython-dist/freqdist.txt"
     fdc_output = "/Users/mac/jython-dist/freqdist_complete.txt"
     cn_output = "/Users/mac/jython-dist/concordance.txt"
+    cl_output = "/Users/mac/jython-dist/collocations.txt"
 else:
     input = argv[1]
     tk_output = argv[2]
     fd_output = argv[3]
     fdc_output = argv[4]
-    concordance = argv[5]
+    cn_output = argv[5]
+    cl_output = argv[6]
 
 text = CorpusAnalyser(
 #    SnowballStemmer('russian', ignore_stopwords=False),
@@ -45,6 +47,10 @@ with iopen(fdc_output, 'w', encoding='utf-8', errors='ignore') as out:
 with iopen(tk_output, 'w', encoding='utf-8', errors='ignore') as out:
     for t in text.stem_tokens:
         out.write(t + "\n")
+
+with iopen(cl_output, 'w', encoding='utf-8', errors='ignore') as out:
+    for c in text.collocations(3):
+        out.write("%s, %s\n" % (c[0], c[1]))
 
 with iopen(cn_output, 'w', encoding='utf-8', errors='ignore') as out:
     for _c in text.concordance(u"правда"):
