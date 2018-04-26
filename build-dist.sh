@@ -14,6 +14,7 @@ local DEST="${PWD}"
 	zip -r "${DEST}/${TARGET}" 'Lib/' -i 'Lib/os.py' -i '*.class' -x \
 		'Lib/site-packages/pip/*' \
 		'Lib/site-packages/setuptools/*' \
+		'Lib/site-packages/easy_install?py.class' \
 		'Lib/site-packages/nltk/test/*' \
 		'Lib/site-packages/chardet/*' \
 		'Lib/site-packages/bs4/tests/*' \
